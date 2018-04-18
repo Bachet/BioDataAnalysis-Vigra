@@ -40,9 +40,9 @@ int main(int argc, char** argv)
     Helpful links: https://ukoethe.github.io/vigra/doc-release/vigra/ImageInputOutputTutorial.html */
 
     //load the image
-    const char* input_image;
-    input_image = "../images/bDZ17-1I_wE02_s7_z1_t1_cGFP_u001.tif";
-    ImageImportInfo imageInfo(input_image,0);
+    const char* inputImage;
+    inputImage = "../images/bDZ17-1I_wE02_s7_z1_t1_cGFP_u001.tif";
+    ImageImportInfo imageInfo(inputImage,0);
 
     //copy image pixels into multiarray data structure
     MultiArray<2, UInt8> imageOriginal(imageInfo.shape());
