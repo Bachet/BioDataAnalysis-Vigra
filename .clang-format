@@ -10,7 +10,7 @@ AllowShortBlocksOnASingleLine: true
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: true
 BreakBeforeBraces: Attach
-BreakStringLiterals: true
+#BreakStringLiterals: true
 ColumnLimit: 0
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false

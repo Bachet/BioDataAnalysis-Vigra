@@ -1,5 +1,5 @@
 //
-// Developed by:  <Your Name> (your@email)
+// Developed by:  <Abd Elrahman Bachet> (abdelrahman.bachet@gmail.com)
 //                http://www.biodataanalysis.de/
 //
 // With contributions by:
@@ -20,44 +20,43 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 
-#include <vigra/multi_array.hxx>
-#include <vigra/impex.hxx>
-#include <vigra/stdconvolution.hxx>
 #include <vigra/convolution.hxx>
+#include <vigra/impex.hxx>
+#include <vigra/multi_array.hxx>
+#include <vigra/stdconvolution.hxx>
 
+#include <cmath>
 #include <iostream>
 #include <string>
-#include <cmath>
 #include <vector>
 
 using namespace vigra;
 
-typedef std::vector<std::vector <double>> Matrix;
+typedef std::vector<std::vector<double>> Matrix;
 
 Matrix gaussianFilter(int kernelSize, double sigma) {
     Matrix kernel(kernelSize, std::vector<double>(kernelSize));
     double sum = 0.0;
 
-    for (int i= -((kernelSize-1)/2) ; i<(kernelSize+1)/2 ; i++) {
-        for (int j=-((kernelSize-1)/2) ; j<(kernelSize+1)/2 ; j++) {
-            kernel[i+((kernelSize-1)/2)][j+((kernelSize-1)/2)] = exp(-(i*i+j*j)/(2*sigma*sigma))/(2*M_PI*sigma*sigma);
-            sum += kernel[i+((kernelSize-1)/2)][j+((kernelSize-1)/2)];
+    for (int i = -((kernelSize - 1) / 2); i < (kernelSize + 1) / 2; i++) {
+        for (int j = -((kernelSize - 1) / 2); j < (kernelSize + 1) / 2; j++) {
+            kernel[i + ((kernelSize - 1) / 2)][j + ((kernelSize - 1) / 2)] = exp(-(i * i + j * j) / (2 * sigma * sigma)) / (2 * M_PI * sigma * sigma);
+            sum += kernel[i + ((kernelSize - 1) / 2)][j + ((kernelSize - 1) / 2)];
         }
     }
     //to check:
     //std::cout<<"sum = "<<sum<<std::endl;
 
-    for (int i= -((kernelSize-1)/2) ; i<(kernelSize+1)/2 ; i++) {
-        for (int j=-((kernelSize-1)/2) ; j<(kernelSize+1)/2 ; j++) {
-            kernel[i+((kernelSize-1)/2)][j+((kernelSize-1)/2)] /= sum;
+    for (int i = -((kernelSize - 1) / 2); i < (kernelSize + 1) / 2; i++) {
+        for (int j = -((kernelSize - 1) / 2); j < (kernelSize + 1) / 2; j++) {
+            kernel[i + ((kernelSize - 1) / 2)][j + ((kernelSize - 1) / 2)] /= sum;
         }
     }
 
     return kernel;
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     std::cout << "Task 02 started" << std::endl;
 
     // You can add your code here
@@ -69,7 +68,7 @@ int main(int argc, char** argv)
     //load the image
     const char* inputImage;
     inputImage = "../images/bDZ17-1I_wE02_s7_z1_t1_cDAPI_u001.tif";
-    ImageImportInfo imageInfo(inputImage,0);
+    ImageImportInfo imageInfo(inputImage, 0);
 
     //copy image pixels into multiarray data structure
     MultiArray<2, UInt8> imageOriginal(imageInfo.shape());
@@ -78,33 +77,32 @@ int main(int argc, char** argv)
     //set the gaussian filter parameters
     int kernelSize = 11;
     double sigma = 3.0;
-    int right = (kernelSize-1)/2;
+    int right = (kernelSize - 1) / 2;
     int left = -right;
 
     //apply the filter
     Kernel2D<double> filter;
-    filter.initExplicitly(Shape2(left,left), Shape2(right,right));
+    filter.initExplicitly(Shape2(left, left), Shape2(right, right));
     filter.initGaussian(sigma);
     MultiArray<2, UInt8> imageSmoothed(imageInfo.shape());
 
     //another way to generate a gaussianFilter manually
 
-    /* Matrix gFilter = gaussianFilter(kernelSize,sigma);
-
-    for (int i=left;i<=right;++i){
-          for (int j=left;i<=right;++j){
-              filter(i,j) = gFilter[i-left][j-left];
-              std::cout<<filter(i,j);
-      }
-      std::cout<<std::endl;
-    }*/
+    // Matrix gFilter = gaussianFilter(kernelSize,sigma);
+    //
+    // for (int i=left;i<=right;++i){
+    //       for (int j=left;i<=right;++j){
+    //           filter(i,j) = gFilter[i-left][j-left];
+    //           std::cout<<filter(i,j);
+    //   }
+    //   std::cout<<std::endl;
+    // }
 
     //convolve the image
     convolveImage(imageOriginal, imageSmoothed, filter);
 
     //save the output image
     exportImage(imageSmoothed, "../images/smoothedImage.tif");
-
 
     std::cout << "Task 02 finished successfully" << std::endl;
     return 0;

@@ -1,5 +1,5 @@
 //
-// Developed by:  <Your Name> (your@email)
+// Developed by:  <Abd Elrahman Bachet> (abdelrahman.bachet@gmail.com)
 //                http://www.biodataanalysis.de/
 //
 // With contributions by:
@@ -20,9 +20,9 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 
-#include <vigra/multi_array.hxx>
-#include <vigra/impex.hxx>
 #include <vigra/imageinfo.hxx>
+#include <vigra/impex.hxx>
+#include <vigra/multi_array.hxx>
 #include <vigra/stdimage.hxx>
 
 #include <iostream>
@@ -30,8 +30,7 @@
 
 using namespace vigra;
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     std::cout << "Task 01 started" << std::endl;
 
     // You can add your code here
@@ -42,26 +41,24 @@ int main(int argc, char** argv)
     //load the image
     const char* inputImage;
     inputImage = "../images/bDZ17-1I_wE02_s7_z1_t1_cGFP_u001.tif";
-    ImageImportInfo imageInfo(inputImage,0);
+    ImageImportInfo imageInfo(inputImage, 0);
 
     //copy image pixels into multiarray data structure
     MultiArray<2, UInt8> imageOriginal(imageInfo.shape());
     importImage(imageInfo, imageOriginal);
 
     //create a new array for output image of size 500x350
-    MultiArray<2, UInt8> imageCropped(Shape2(500,350));
+    MultiArray<2, UInt8> imageCropped(Shape2(500, 350));
 
     //crop the image starting from index 400,500
-    for (int i=0; i < imageCropped.shape(1); ++i){
-      for (int j=0; j < imageCropped.shape(0); ++j){
-          imageCropped(j,i) = imageOriginal(400+j,500+i);
-      }
+    for (int i = 0; i < imageCropped.shape(1); ++i) {
+        for (int j = 0; j < imageCropped.shape(0); ++j) {
+            imageCropped(j, i) = imageOriginal(400 + j, 500 + i);
+        }
     }
 
     //save the output image
     exportImage(imageCropped, "../images/croppedImage.tif");
-
-
 
     std::cout << "Task 01 finished successfully" << std::endl;
     return 0;
